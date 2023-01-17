@@ -9,6 +9,12 @@ Solver::Solver(float temperature_min, float temperature_max, float lambda)
 	this->temperature_min = temperature_min;
     this->temperature_max = temperature_max;
     this->lambda = lambda;
+    
+    std::random_device rd;
+    this->generator = std::mt19937(rd()); 
+    this->distribution = std::uniform_real_distribution<double>(0, 1);
+
+
 }
 
 
@@ -25,7 +31,7 @@ int Solver::compute_score(std::vector<Piece>* pieces, int nb_pieces, int width){
     return score;
 }
 
-bool accept(int current_score, int new_score, float temperature) {
+bool Solver::accept(int current_score, int new_score, float temperature) {
     int delta = current_score - new_score;
 
     if (delta < 0)
@@ -33,7 +39,7 @@ bool accept(int current_score, int new_score, float temperature) {
 
     float p = exp(-delta / temperature);
 
-    float a = ((float) rand()) / RAND_MAX;
+    float a = this->distribution(this->generator);
 
     if (p > a)
         return true;
@@ -65,14 +71,14 @@ void Solver::solve(Tetravex& game) {
     int iterations = 0;
 
     while(current_score != max_score) {
-        iterations++;
 
         int piece1 = 0;
         int piece2 = 0;
 
         do {
-            piece1 = rand() % (nb_pieces);
-            piece2 = rand() % (nb_pieces);
+            piece1 = floor(this->distribution(this->generator) * (nb_pieces + 1));
+            piece2 = floor(this->distribution(this->generator) * (nb_pieces + 1));
+            printf("%d %d\n", piece1, piece2);
         } while(piece1 == piece2 || pieces[piece1].fixed || pieces[piece2].fixed);
 
         swap_pieces(&pieces, piece1, piece2);
@@ -89,9 +95,10 @@ void Solver::solve(Tetravex& game) {
         pieces = game.get_pieces();
 
         if (temperature > temperature_min) {
-            temperature *= lambda;
+            temperature = temperature_max / (1 + lambda * iterations);
         }
 
+        iterations++;
     }
     printf("Iterations : %d\n", iterations);
 

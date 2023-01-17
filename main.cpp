@@ -87,14 +87,17 @@ int main(int argc, char** argv)
         throw std::invalid_argument("Your command line has to be : command line ./a.out in.txt out.txt\n");
     }
     
-    std::fstream infile (argv[1]);
-    std::fstream outfile (argv[2]);
+    Solver solver(0.5, 5, 0.99999);
 
-    Tetravex tetravex = to_tetravex(infile);    
-    Solver solver(0.5, 10, 0.999999);
+    for (int i = 0; i < 70; i++) {
+       std::fstream infile (argv[1]);
+       std::fstream outfile (argv[2]);
 
-    solver.solve(tetravex);
-    std::cout << tetravex;
+       Tetravex tetravex = to_tetravex(infile);    
+       solver.solve(tetravex);
+       std::cout << tetravex;
+    }
 
+    
     return 0;
 }
