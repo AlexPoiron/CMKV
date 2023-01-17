@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <vector>
+#include <iostream>
 
 // Position of our pieces following the order North, West, Est and South
 #define N 0
@@ -12,13 +13,14 @@
 struct Piece
 {
     int values[4];
+    int fixed;
 };
 
 class Tetravex
 {
     public:
         // Constructor
-        Tetravex(int width, int height, int total_values);
+        Tetravex(int width, int height);
         
         // Setter for pieces
         void set_pieces(std::vector<Piece> pieces);
@@ -33,5 +35,6 @@ class Tetravex
 		int height;
 		int nb_values;
 		std::vector<Piece> pieces;
-
 };
+
+std::ostream& operator<<(std::ostream& o, const Tetravex& tetravex);
