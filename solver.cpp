@@ -33,11 +33,11 @@ bool accept(int current_score, int new_score, float temperature) {
 
     float p = exp(-delta / temperature);
 
-    float a = rand() / RAND_MAX;
-    
+    float a = ((float) rand()) / RAND_MAX;
+
     if (p > a)
         return true;
-    
+     
     return false;
 }
 
@@ -62,8 +62,11 @@ void Solver::solve(Tetravex& game) {
     int current_score = compute_score(&pieces, nb_pieces, width);
     
     float temperature = temperature_max;
+    int iterations = 0;
 
     while(current_score != max_score) {
+        iterations++;
+
         int piece1 = 0;
         int piece2 = 0;
 
@@ -90,5 +93,6 @@ void Solver::solve(Tetravex& game) {
         }
 
     }
+    printf("Iterations : %d\n", iterations);
 
 }

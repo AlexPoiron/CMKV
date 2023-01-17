@@ -91,7 +91,7 @@ int main(int argc, char** argv)
     std::fstream outfile (argv[2]);
 
     Tetravex tetravex = to_tetravex(infile);    
-    Solver solver(1, 4, 0.99);
+    Solver solver(0.5, 10, 0.999999);
 
     solver.solve(tetravex);
     std::cout << tetravex;
