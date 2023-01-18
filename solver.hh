@@ -1,9 +1,7 @@
 #pragma once
-#include <stdlib.h>
-#include <random>
-#include <vector>
-#include "math.h"
+
 #include "tetravex.hh"
+#include <random>
 
 class Solver
 {

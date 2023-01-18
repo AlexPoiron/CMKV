@@ -1,11 +1,3 @@
-#include <iostream>
-#include <fstream>
-#include <stdlib.h>
-#include <stdexcept>
-#include <string>
-#include <cstring>
-#include <math.h>
-
 #include "tetravex.hh"
 #include "solver.hh"
 

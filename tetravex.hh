@@ -4,6 +4,12 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
+#include <string>
+#include <numeric>
+#include <cstring>
+#include <math.h>
+
 
 // Position of our pieces following the order North, West, Est and South
 #define N 0
