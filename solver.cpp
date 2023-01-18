@@ -24,7 +24,7 @@ void Solver::compute_pieces_distributions(std::vector<int> pieces_scores, int nb
     std::vector<float> weights(nb_pieces);
 
     for (int i = 0; i < nb_pieces; i++) {
-        weights[i] = 1 / (((pieces_scores[i] > 0) / 2) + 1);
+        weights[i] = 1 / ((pieces_scores[i] / 4) + 1);
     }
     
     this->pieces_distribution = std::discrete_distribution<int> (weights.begin(), weights.end());
@@ -129,7 +129,7 @@ void Solver::solve(Tetravex &game)
             current_score = new_score;
         }
 
-        //printf("Score : %d, Temperature : %.6f\n", current_score, temperature);
+        printf("Score : %d, Temperature : %.6f\n", current_score, temperature);
 
         pieces = game.get_pieces();
 

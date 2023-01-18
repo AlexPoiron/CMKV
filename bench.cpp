@@ -75,9 +75,9 @@ void bench(std::vector<Tetravex> tetravexes, Solver solver) {
 
     high_resolution_clock::time_point end = high_resolution_clock::now();
 
-    duration<double, std::milli> duration = duration_cast<microseconds>(end - start);
+    duration<double, std::milli> duration = duration_cast<milliseconds>(end - start);
     
-    std::cout << "Total bench time (" << tetravexes.size() << " tetravexes): " << duration.count() << " microseconds" << std::endl;
+    std::cout << "Total bench time (" << tetravexes.size() << " tetravexes): " << duration.count() << " milliseconds" << std::endl;
 }
 
 
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
         throw std::invalid_argument("Invalid size of grid for benchmark\n");
     }
 
-    Solver solver(2, 10, 0.999);
+    Solver solver(0.8, 10, 0.9999);
 
 
     std::vector<Tetravex> tetravexes = construct_tetravexes(grids, turns, fixed);
