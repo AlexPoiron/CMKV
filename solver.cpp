@@ -111,7 +111,6 @@ void Solver::solve(Tetravex &game)
         {
             piece1 = this->pieces_distribution(this->generator);
             piece2 = this->pieces_distribution(this->generator);
-            //printf("%d %d\n", piece1, piece2);
         } while (piece1 == piece2 || pieces[piece1].fixed || pieces[piece2].fixed);
 
 
@@ -129,7 +128,7 @@ void Solver::solve(Tetravex &game)
             current_score = new_score;
         }
 
-        printf("Score : %d, Temperature : %.6f\n", current_score, temperature);
+        //printf("Score : %d, Temperature : %.6f\n", current_score, temperature);
 
         pieces = game.get_pieces();
 

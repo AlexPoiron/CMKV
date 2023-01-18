@@ -107,11 +107,7 @@ std::fstream &operator<<(std::fstream &file, Tetravex &tetravex)
 		for (int i = 0; i < 4; ++i)
 		{
 			file << piece.values[i];
-		}
-		if (piece.fixed)
-		{
-			file << "  @\n";
-		}
+		}	
 		file << '\n';
 		
 	}

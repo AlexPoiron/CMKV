@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     Solver solver(0.8, 10, 0.9999);
 
     std::fstream infile(argv[1]);
-    std::fstream outfile(argv[2]);
+    std::fstream outfile(argv[2], std::fstream::out);
 
     bool fixed = true;
     Tetravex tetravex = to_tetravex(infile, fixed);
