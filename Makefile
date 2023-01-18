@@ -1,8 +1,11 @@
 CC = g++
 
-CFLAGS = -DNDEBUG -O5 -std=c++17 -lpthread -Wl,-no-as-needed
+CFLAGS = -g -DNDEBUG -O5 -std=c++17 -lpthread -Wl,-no-as-needed
 
 all: a.out
+
+bench: bench.o tetravex.o solver.o
+	$(CC) $(CFLAGS) -o bench bench.o tetravex.o solver.o
 
 a.out: main.o tetravex.o solver.o
 	$(CC) $(CFLAGS) -o a.out main.o tetravex.o solver.o
