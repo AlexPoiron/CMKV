@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <numeric>
 #include <cstring>
 #include <math.h>
 using namespace std;
@@ -16,11 +17,22 @@ Tetravex::Tetravex(int width, int height)
 	this->height = height;
 	this->nb_values = 4 * width * height;
 	this->pieces = std::vector<Piece>(this->width * this->height);
+	this->scores = std::vector<int>(this->width * this->height);
+	compute_pieces_scores();
 }
 
 void Tetravex::set_pieces(std::vector<Piece> pieces)
 {
 	this->pieces = pieces;
+	compute_pieces_scores();
+}
+
+void Tetravex::set_scores(std::vector<int> scores){
+	this->scores = scores;
+}
+
+std::vector<int> Tetravex::get_scores() const{
+	return this->scores;
 }
 
 std::vector<Piece> Tetravex::get_pieces() const
@@ -36,6 +48,29 @@ int Tetravex::get_width() const
 int Tetravex::get_height() const
 {
 	return this->height;
+}
+
+int Tetravex::compute_total_score(){
+	return std::accumulate(this->scores.begin(), this->scores.end(), 0);
+}
+
+void Tetravex::compute_pieces_scores(){
+	int nb_pieces = this->width * this->height;
+	
+    for (int i = 0; i < nb_pieces; i++)
+    {
+		int score = 0;
+        if (i - 1 >= 0 && this->pieces[i].values[W] == this->pieces[i - 1].values[E])
+            score++;
+        if (i - this->width >= 0 && this->pieces[i].values[N] == this->pieces[i - this->width].values[S])
+            score++;
+     	if (i + 1 < nb_pieces && this->pieces[i].values[E] == this->pieces[i + 1].values[W])
+            score++;
+        if (i + this->width < nb_pieces && this->pieces[i].values[S] == this->pieces[i + this->width].values[N])
+            score++;
+
+		this->scores[i] = score;
+    }
 }
 
 std::ostream &operator<<(std::ostream &o, const Tetravex &tetravex)
@@ -96,32 +131,28 @@ std::ostream &operator<<(std::ostream &o, const Tetravex &tetravex)
 	return o;
 }
 
-std::istream &operator>>(std::istream &i, Tetravex &tetravex)
+std::fstream &operator<<(std::fstream &file, Tetravex &tetravex)
 {
-	std::vector<Piece> tmp;
-	std::cout << "";
-	Piece p;
-	char c;
-	int k = 0;
-
-	while (i.get(c))
+	std::vector<Piece> pieces = tetravex.get_pieces();
+	for(int i = 0; i < pieces.size(); ++i)
 	{
-		if (c == ' ')
+		Piece piece = pieces[i];
+		for (int i = 0; i < 4; ++i)
 		{
-			if (k != 4)
-				throw std::invalid_argument("Error in reading tetravex from file\n");
-			tmp.push_back(p);
-			k = 0;
+			file << piece.values[i];
 		}
-		else
-			p.values[k++] = atoi(&c);
+		if (piece.fixed)
+		{
+			file << "  @\n";
+		}
+		file << '\n';
+		
 	}
-	tmp.push_back(p);
-	tetravex.set_pieces(tmp);
-	return i;
+	return file;
+
 }
 
-Tetravex to_tetravex(std::fstream &infile)
+Tetravex to_tetravex(std::fstream &infile, bool &fixed)
 {
 	if (!infile)
 	{
@@ -166,6 +197,7 @@ Tetravex to_tetravex(std::fstream &infile)
 		else if (line.find('@') < line.length() || line.find(' ') < line.length())
 		{
 			new_piece.fixed = 1;
+			fixed = true;
 		}
 		else
 		{

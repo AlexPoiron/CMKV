@@ -28,9 +28,12 @@ int main(int argc, char **argv)
     std::fstream infile(argv[1]);
     std::fstream outfile(argv[2]);
 
-    Tetravex tetravex = to_tetravex(infile);
+    bool fixed = true;
+    Tetravex tetravex = to_tetravex(infile, fixed);
+    
     solver.solve(tetravex);
     std::cout << tetravex;
+    outfile << tetravex;
 
     infile.close();
     outfile.close();
