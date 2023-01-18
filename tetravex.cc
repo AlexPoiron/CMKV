@@ -1,8 +1,16 @@
 #include "tetravex.hh"
 
-
+/**
+ * @brief Constructor of our Tetravex class.
+ * 
+ * @param width first dimension of the border
+ * @param height Second dimension of the border
+ * 
+ * @return Initialize a Tetravex object with the given parameters
+*/
 Tetravex::Tetravex(int width, int height)
 {
+	
 	if (width != height)
 	{
 		throw std::invalid_argument("Invalid size in the input file. \n");
@@ -13,11 +21,12 @@ Tetravex::Tetravex(int width, int height)
 	this->pieces = std::vector<Piece>(this->width * this->height);
 }
 
+/// Setter and Getters
+
 void Tetravex::set_pieces(std::vector<Piece> pieces)
 {
 	this->pieces = pieces;
 }
-
 
 std::vector<Piece> Tetravex::get_pieces() const
 {
@@ -34,6 +43,14 @@ int Tetravex::get_height() const
 	return this->height;
 }
 
+/**
+ * @brief Redirection operator for pretty print.
+ * 
+ * @param o The output stream where the Tetravex is printed. In this context, it's always in the terminal
+ * @param tetravex Tetravex object
+ * 
+ * @return The output stream given
+*/
 std::ostream &operator<<(std::ostream &o, const Tetravex &tetravex)
 {
 	o << " ";
@@ -92,6 +109,14 @@ std::ostream &operator<<(std::ostream &o, const Tetravex &tetravex)
 	return o;
 }
 
+/**
+ * @brief Redirection operator to save our Tetravex solved in an output file.
+ * 
+ * @param file The file where we want to save our solution
+ * @param tetravex Our tetravex object
+ * 
+ * @return the given file stream
+*/
 std::fstream &operator<<(std::fstream &file, Tetravex &tetravex)
 {
 	std::vector<Piece> pieces = tetravex.get_pieces();
@@ -101,14 +126,21 @@ std::fstream &operator<<(std::fstream &file, Tetravex &tetravex)
 		for (int i = 0; i < 4; ++i)
 		{
 			file << piece.values[i];
-		}	
+		}
+
 		file << '\n';
-		
 	}
 	return file;
-
 }
 
+/**
+ * @brief Parsing method where from an input file we create a Tetravex object
+ * 
+ * @param infile The file stream related to the input file
+ * @param fixed Boolean value that we set to True if we have a fixed piece in the file
+ * 
+ * @return A Tetravex object corresponding to the given input file.
+*/
 Tetravex to_tetravex(std::fstream &infile, bool &fixed)
 {
 	if (!infile)
@@ -118,23 +150,26 @@ Tetravex to_tetravex(std::fstream &infile, bool &fixed)
 
 	std::vector<Piece> pieces;
 
-	int minimal_length = 4;
-	int maximal_length = 6;
+	// Constant values representing min & max number of chars in one line in our input file
+	int MIN_LG = 5; // 4 values of a piece + \n 
+	int MAX_LG = 7; // 4 values + ' ' + '@' + \n
 
 	std::string line;
 	int count_line = 0;
 
+	// Getline to read line by line our input file
 	while (std::getline(infile, line))
 	{
-		if (line.length() < minimal_length || line.length() > maximal_length + 1)
+		// Check that our line length corresponding the the right format : 4 < length < 8
+		if (line.length() < MIN_LG - 1 || line.length() > MAX_LG)
 		{
 			throw std::invalid_argument("Input file with wrong format !\n");
 		}
 
 		Piece new_piece;
 
-		// Check if there are 4 int and append them to our values list.
-		for (int i = 0; i < minimal_length; i++)
+		// Check if there are 4 numbers in the first 4 chars and append them to our values list.
+		for (int i = 0; i < MIN_LG - 1; i++)
 		{
 			const char c = line[i];
 			if ('0' > c || c > '9')
@@ -146,8 +181,8 @@ Tetravex to_tetravex(std::fstream &infile, bool &fixed)
 			new_piece.values[i] = value;
 		}
 
-		// End of line
-		if (line.length() == 5 || line.length() == 4)
+		// Check if the piece is fixed or not
+		if (line.length() == MIN_LG || line.length() == MIN_LG - 1)
 		{
 			new_piece.fixed = 0;
 		}
@@ -160,6 +195,7 @@ Tetravex to_tetravex(std::fstream &infile, bool &fixed)
 		{
 			throw std::invalid_argument("Input file with wrong format\n");
 		}
+		// Add the piece in our vector
 		pieces.push_back(new_piece);
 		count_line++;
 	}
@@ -170,8 +206,8 @@ Tetravex to_tetravex(std::fstream &infile, bool &fixed)
 		throw std::invalid_argument("Wrong size in the input file.\n");
 	}
 
+	// Creation of the tetravex object
 	int dims = sqrt(count_line);
-
 	Tetravex tetravex = Tetravex(dims, dims);
 	tetravex.set_pieces(pieces);
 

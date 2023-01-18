@@ -84,7 +84,7 @@ void bench(std::vector<Tetravex> tetravexes, Solver solver) {
 
 int main(int argc, char **argv)
 {
-    // command line ./bench size
+    // command line : ./bench size number_of_round fixed(0 or 1)
 
 
     if (argc != 4)
@@ -103,10 +103,7 @@ int main(int argc, char **argv)
     }
 
     Solver solver(0.80, 15, 0.9999);
-
-
     std::vector<Tetravex> tetravexes = construct_tetravexes(grids, turns, fixed);
-
     std::cout << "Awaiting key press to start solving ..." << std::endl;
     getchar();
 

@@ -3,13 +3,16 @@
 #include "tetravex.hh"
 #include <random>
 
+/**
+ * @brief Definition of the Solver class.
+*/
 class Solver
 {
     public:
         // Constructor
         Solver(float temperature_min, float temperature_max, float lambda);
         
-        //Methods
+        // Methods
         int compute_total_score(std::vector<int> scores);
         std::vector<int> compute_pieces_scores(std::vector<Piece> pieces, int width, int height);
         void compute_pieces_distributions(std::vector<int> pieces_scores, int nb_pieces);
@@ -18,6 +21,7 @@ class Solver
         void solve(Tetravex& game);
         
     private:
+        // Attributes
         float temperature_min;
         float temperature_max;
         float lambda;
@@ -29,4 +33,5 @@ class Solver
 
 };
 
+// Method to swap pieces to solve the tetravex
 void swap_pieces(std::vector<Piece> *pieces, int piece1, int piece2);

@@ -1,5 +1,14 @@
 #include "solver.hh"
 
+/**
+ * @brief Constructor of the Solver class.
+ * 
+ * @param temperature_min Hyperparameter for the minimal temperature
+ * @param temperature_max Hyperparameter for the maximal temperature
+ * @param lambda Hyperparameter that is set around 1 (0.999...)
+ * 
+ * @return Initialize a Solver object 
+*/
 Solver::Solver(float temperature_min, float temperature_max, float lambda)
 {
     if (temperature_min > temperature_max)
@@ -13,12 +22,14 @@ Solver::Solver(float temperature_min, float temperature_max, float lambda)
     std::random_device rd;
     this->generator = std::mt19937(rd());
     this->accept_distribution = std::uniform_real_distribution<double>(0, 1);
-    
 }
 
-
-
-// Function that compute weighted distribution
+/**
+ * @brief Compute a weighted discrete distribution on each piece according to their score
+ * 
+ * @param pieces_scores The scores
+ * @param nb_pieces Total number of pieces
+*/
 void Solver::compute_pieces_distributions(std::vector<int> pieces_scores, int nb_pieces) {
 
     std::vector<float> weights(nb_pieces);
@@ -30,6 +41,15 @@ void Solver::compute_pieces_distributions(std::vector<int> pieces_scores, int nb
     this->pieces_distribution = std::discrete_distribution<int> (weights.begin(), weights.end());
 }
 
+/**
+ * @brief Determine if we accept a recent swap between two pieces.
+ * 
+ * @param current_score Score before the swap
+ * @param new_score Score after the swap
+ * @param temperature The actual temperature
+ * 
+ * @return True or False
+*/
 bool Solver::accept(int current_score, int new_score, float temperature)
 {
     int delta = current_score - new_score;
@@ -46,6 +66,13 @@ bool Solver::accept(int current_score, int new_score, float temperature)
     return false;
 }
 
+/**
+ * @brief Swap two pieces
+ * 
+ * @param pieces The vector of pieces
+ * @param piece1 Index of the first piece to swap
+ * @param piece2 Index of the second piece top swap
+*/
 void swap_pieces(std::vector<Piece> *pieces, int piece1, int piece2)
 {
     Piece tmp = (*pieces)[piece1];
@@ -53,6 +80,13 @@ void swap_pieces(std::vector<Piece> *pieces, int piece1, int piece2)
     (*pieces)[piece2] = tmp;
 }
 
+/**
+ * @brief Compute the total score for all the pieces
+ * 
+ * @param scores Vector containing all the scores
+ * 
+ * @return The sum of these scores
+*/
 int Solver::compute_total_score(std::vector<int> scores){
     int total = 0;
     for (int i = 0; i < scores.size(); i++) {
@@ -61,6 +95,15 @@ int Solver::compute_total_score(std::vector<int> scores){
 	return total;
 }
 
+/**
+ * @brief Compute for each piece its score following its placement and the connections in the game
+ * 
+ * @param pieces The vector of pieces
+ * @param width First dimension of the tetravex board
+ * @param height Second dimension of the tetravex board
+ * 
+ * @return A vector containing all the computed scores
+*/
 std::vector<int> Solver::compute_pieces_scores(std::vector<Piece> pieces, int width, int height){
 	int nb_pieces = width * height;
     std::vector<int> scores(nb_pieces);
@@ -68,26 +111,31 @@ std::vector<int> Solver::compute_pieces_scores(std::vector<Piece> pieces, int wi
     for (int i = 0; i < nb_pieces; i++)
     {
 		int score = 0;
+        // Check for horizontal connection for both possibilities
         if (i - 1 >= 0 && i % width != 0 && pieces[i].values[W] == pieces[i - 1].values[E])
-            score++;
-        if (i - width >= 0 && pieces[i].values[N] == pieces[i - width].values[S])
-            score++;
-     	if (i + 1 < nb_pieces && i % width != width - 1 && pieces[i].values[E] == pieces[i + 1].values[W])
             score++;
         if (i + width < nb_pieces && pieces[i].values[S] == pieces[i + width].values[N])
             score++;
 
+        // Check for vertical connection for both possibilites
+        if (i - width >= 0 && pieces[i].values[N] == pieces[i - width].values[S])
+            score++;
+     	if (i + 1 < nb_pieces && i % width != width - 1 && pieces[i].values[E] == pieces[i + 1].values[W])
+            score++;
+        
 		scores[i] = score;
     }
     return scores;
 }
 
+/**
+ * @brief Main function where we solve our Tetravex following a Metropolis-Hastings with simulated annealing.
+ * 
+ * @param game Our Tetravex object
+*/
 void Solver::solve(Tetravex &game)
 {
-
-
     std::vector<Piece> pieces = game.get_pieces();
-
     int width = game.get_width();
     int height = game.get_height();
 
@@ -131,6 +179,8 @@ void Solver::solve(Tetravex &game)
 
         pieces = game.get_pieces();
 
+        // We use a multiplicative monotonic cooling to decrease our temperature. We use precisely the linear one.
+        // We follow this formula : Tk = T_max / (1 + lambda*k) with lambda > 0 anf k : number of iterations
         if (temperature > temperature_min)
         {
             temperature = temperature_max / (1 + lambda * iterations);
