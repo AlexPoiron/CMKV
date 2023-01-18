@@ -15,7 +15,7 @@ int main(int argc, char **argv)
         throw std::invalid_argument("Your command line has to be : command line ./a.out in.txt out.txt\n");
     }
 
-    Solver solver(0.8, 10, 0.9999);
+    Solver solver(0.8, 15, 0.9999);
 
     std::fstream infile(argv[1]);
     std::fstream outfile(argv[2], std::fstream::out);
