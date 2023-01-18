@@ -68,11 +68,11 @@ std::vector<int> Solver::compute_pieces_scores(std::vector<Piece> pieces, int wi
     for (int i = 0; i < nb_pieces; i++)
     {
 		int score = 0;
-        if (i - 1 >= 0 && pieces[i].values[W] == pieces[i - 1].values[E])
+        if (i - 1 >= 0 && i % width != 0 && pieces[i].values[W] == pieces[i - 1].values[E])
             score++;
         if (i - width >= 0 && pieces[i].values[N] == pieces[i - width].values[S])
             score++;
-     	if (i + 1 < nb_pieces && pieces[i].values[E] == pieces[i + 1].values[W])
+     	if (i + 1 < nb_pieces && i % width != width - 1 && pieces[i].values[E] == pieces[i + 1].values[W])
             score++;
         if (i + width < nb_pieces && pieces[i].values[S] == pieces[i + width].values[N])
             score++;
@@ -113,12 +113,12 @@ void Solver::solve(Tetravex &game)
             piece2 = this->pieces_distribution(this->generator);
         } while (piece1 == piece2 || pieces[piece1].fixed || pieces[piece2].fixed);
 
-
+        compute_total_score(current_pieces_scores);
         swap_pieces(&pieces, piece1, piece2);
         
         std::vector<int> new_pieces_scores = compute_pieces_scores(pieces, width, height);
         int new_score = compute_total_score(new_pieces_scores);
- 
+
 
         if (accept(current_score, new_score, temperature))
         {
@@ -127,20 +127,19 @@ void Solver::solve(Tetravex &game)
             current_pieces_scores = new_pieces_scores;
             current_score = new_score;
         }
-
         //printf("Score : %d, Temperature : %.6f\n", current_score, temperature);
 
         pieces = game.get_pieces();
 
         if (temperature > temperature_min)
         {
-            //temperature = temperature_max / (1 + lambda * iterations);
-            temperature *= lambda;
+            temperature = temperature_max / (1 + lambda * iterations);
+            //temperature *= lambda;
         }
 
         iterations++;
     }
-    printf("Iterations : %d\n", iterations);
+    //printf("Iterations : %d\n", iterations);
 }
 
 
