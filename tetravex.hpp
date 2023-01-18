@@ -23,26 +23,19 @@ public:
     // Constructor
     Tetravex(int width, int height);
 
-    // Setter for pieces
+    // Setters
     void set_pieces(std::vector<Piece> pieces);
-    void set_scores(std::vector<int> scores);
 
     // Getters
-    std::vector<int> get_scores() const;
     std::vector<Piece> get_pieces() const;
     int get_width() const;
     int get_height() const;
 
-    //Compute score 
-    int compute_total_score();
-
 private:
-    void compute_pieces_scores();
     int width;
     int height;
     int nb_values;
     std::vector<Piece> pieces;
-    std::vector<int> scores;
 };
 
 std::ostream &operator<<(std::ostream &o, const Tetravex &tetravex);

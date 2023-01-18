@@ -17,23 +17,13 @@ Tetravex::Tetravex(int width, int height)
 	this->height = height;
 	this->nb_values = 4 * width * height;
 	this->pieces = std::vector<Piece>(this->width * this->height);
-	this->scores = std::vector<int>(this->width * this->height);
-	compute_pieces_scores();
 }
 
 void Tetravex::set_pieces(std::vector<Piece> pieces)
 {
 	this->pieces = pieces;
-	compute_pieces_scores();
 }
 
-void Tetravex::set_scores(std::vector<int> scores){
-	this->scores = scores;
-}
-
-std::vector<int> Tetravex::get_scores() const{
-	return this->scores;
-}
 
 std::vector<Piece> Tetravex::get_pieces() const
 {
@@ -48,29 +38,6 @@ int Tetravex::get_width() const
 int Tetravex::get_height() const
 {
 	return this->height;
-}
-
-int Tetravex::compute_total_score(){
-	return std::accumulate(this->scores.begin(), this->scores.end(), 0);
-}
-
-void Tetravex::compute_pieces_scores(){
-	int nb_pieces = this->width * this->height;
-	
-    for (int i = 0; i < nb_pieces; i++)
-    {
-		int score = 0;
-        if (i - 1 >= 0 && this->pieces[i].values[W] == this->pieces[i - 1].values[E])
-            score++;
-        if (i - this->width >= 0 && this->pieces[i].values[N] == this->pieces[i - this->width].values[S])
-            score++;
-     	if (i + 1 < nb_pieces && this->pieces[i].values[E] == this->pieces[i + 1].values[W])
-            score++;
-        if (i + this->width < nb_pieces && this->pieces[i].values[S] == this->pieces[i + this->width].values[N])
-            score++;
-
-		this->scores[i] = score;
-    }
 }
 
 std::ostream &operator<<(std::ostream &o, const Tetravex &tetravex)

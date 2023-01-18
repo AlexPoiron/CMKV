@@ -101,7 +101,7 @@ int main(int argc, char **argv)
         throw std::invalid_argument("Invalid size of grid for benchmark\n");
     }
 
-    Solver solver(0.5, 10, 0.99999);
+    Solver solver(2, 10, 0.999);
 
 
     std::vector<Tetravex> tetravexes = construct_tetravexes(grids, turns, fixed);
