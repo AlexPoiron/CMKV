@@ -1,4 +1,4 @@
-#include "solver.hpp"
+#include "solver.hh"
 
 Solver::Solver(float temperature_min, float temperature_max, float lambda)
 {

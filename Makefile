@@ -10,17 +10,17 @@ bench: bench.o tetravex.o solver.o
 a.out: main.o tetravex.o solver.o
 	$(CC) $(CFLAGS) -o a.out main.o tetravex.o solver.o
   
-main.o: main.cpp 
-	$(CC) $(CFLAGS) -c main.cpp
+main.o: main.cc 
+	$(CC) $(CFLAGS) -c main.cc
 
-bench.o : bench.cpp
-	$(CC) $(CFLAGS) -c bench.cpp
+bench.o : bench.cc
+	$(CC) $(CFLAGS) -c bench.cc
 
-tetravex.o: tetravex.cpp
-	$(CC) $(CFLAGS) -c tetravex.cpp
+tetravex.o: tetravex.cc
+	$(CC) $(CFLAGS) -c tetravex.cc
 
-solver.o : solver.cpp
-	$(CC) $(CFLAGS) -c solver.cpp
+solver.o : solver.cc
+	$(CC) $(CFLAGS) -c solver.cc
 
 clean:
 	rm -rf *.o  a.out bench

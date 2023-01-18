@@ -1,11 +1,11 @@
-#include "tetravex.hpp"
+#include "tetravex.hh"
 
 #include <stdexcept>
 #include <string>
 #include <numeric>
 #include <cstring>
 #include <math.h>
-using namespace std;
+
 
 Tetravex::Tetravex(int width, int height)
 {

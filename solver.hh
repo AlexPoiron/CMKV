@@ -3,7 +3,7 @@
 #include <random>
 #include <vector>
 #include "math.h"
-#include "tetravex.hpp"
+#include "tetravex.hh"
 
 class Solver
 {

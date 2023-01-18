@@ -9,8 +9,8 @@
 #include <dirent.h>
 #include <chrono>
 
-#include "tetravex.hpp"
-#include "solver.hpp"
+#include "tetravex.hh"
+#include "solver.hh"
 
 // argc[0] = in.txt
 // ligne = 1 piece / si arobase -> fixed = 1
