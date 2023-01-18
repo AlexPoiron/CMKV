@@ -78,10 +78,10 @@ void Solver::solve(Tetravex &game)
 
         do
         {
-            piece1 = floor(this->distribution(this->generator) * (nb_pieces + 1));
-            piece2 = floor(this->distribution(this->generator) * (nb_pieces + 1));
-            printf("%d %d\n", piece1, piece2);
+            piece1 = floor(this->distribution(this->generator) * (nb_pieces));
+            piece2 = floor(this->distribution(this->generator) * (nb_pieces));
         } while (piece1 == piece2 || pieces[piece1].fixed || pieces[piece2].fixed);
+
 
         swap_pieces(&pieces, piece1, piece2);
 
@@ -99,7 +99,8 @@ void Solver::solve(Tetravex &game)
 
         if (temperature > temperature_min)
         {
-            temperature = temperature_max / (1 + lambda * iterations);
+            //temperature = temperature_max / (1 + lambda * iterations);
+            temperature *= lambda;
         }
 
         iterations++;

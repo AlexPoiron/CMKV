@@ -176,7 +176,6 @@ Tetravex to_tetravex(std::fstream &infile)
 	}
 
 	// Check size of the tetravex (2x2 to 6x6)
-	std::cout << count_line << std::endl;
 	if (sqrt(count_line) != 2 && sqrt(count_line) != 3 && sqrt(count_line) != 4 && sqrt(count_line) != 5 && sqrt(count_line) != 6)
 	{
 		throw std::invalid_argument("Wrong size in the input file.\n");

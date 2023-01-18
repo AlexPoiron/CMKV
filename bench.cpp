@@ -36,28 +36,7 @@ std::vector<std::string> search_data(char size)
     return grids;
 }
 
-int main(int argc, char **argv)
-{
-    // command line ./bench size
-
-    using namespace std::chrono;
-
-    if (argc != 3)
-    {
-        throw std::invalid_argument("Your command line has to be : command line ./bench grid_size turns\n");
-    }
-
-    int turns = atoi(argv[2]);
-
-    std::vector<std::string> grids = search_data(argv[1][0]);
-
-    if (grids.empty())
-    {
-        throw std::invalid_argument("Invalid size of grid for benchmark\n");
-    }
-
-    Solver solver(0.5, 5, 0.99999);
-
+std::vector<Tetravex> construct_tetravexes(std::vector<std::string> grids, int turns) {
     std::vector<Tetravex> tetravexes;
 
     for (int i = 0; i < turns; i++)
@@ -75,9 +54,13 @@ int main(int argc, char **argv)
         }
     }
 
-    std::cout << "Awaiting key press to start solving ..." << std::endl;
-    getchar();
+    return tetravexes;
+}
 
+
+void bench(std::vector<Tetravex> tetravexes, Solver solver, int turns) {
+    using namespace std::chrono;
+    
     high_resolution_clock::time_point start = high_resolution_clock::now();
 
     for (int i = 0; i < tetravexes.size(); i++)
@@ -88,8 +71,39 @@ int main(int argc, char **argv)
     high_resolution_clock::time_point end = high_resolution_clock::now();
 
     duration<double, std::milli> duration = duration_cast<microseconds>(end - start);
-
+    
     std::cout << "Total bench time (" << turns << " turns): " << duration.count() << " microseconds" << std::endl;
+}
+
+
+int main(int argc, char **argv)
+{
+    // command line ./bench size
+
+
+    if (argc != 3)
+    {
+        throw std::invalid_argument("Your command line has to be : command line ./bench grid_size turns\n");
+    }
+
+    int turns = atoi(argv[2]);
+
+    std::vector<std::string> grids = search_data(argv[1][0]);
+
+    if (grids.empty())
+    {
+        throw std::invalid_argument("Invalid size of grid for benchmark\n");
+    }
+
+    Solver solver(0.5, 10, 0.99999);
+
+    std::vector<Tetravex> tetravexes = construct_tetravexes(grids, turns);
+
+    std::cout << "Awaiting key press to start solving ..." << std::endl;
+    getchar();
+
+    bench(tetravexes, solver, turns);
+
 
     return 0;
 }
