@@ -96,6 +96,31 @@ std::ostream &operator<<(std::ostream &o, const Tetravex &tetravex)
 	return o;
 }
 
+std::istream &operator>>(std::istream &i, Tetravex &tetravex)
+{
+	std::vector<Piece> tmp;
+	std::cout << "";
+	Piece p;
+	char c;
+	int k = 0;
+
+	while (i.get(c))
+	{
+		if (c == ' ')
+		{
+			if (k != 4)
+				throw std::invalid_argument("Error in reading tetravex from file\n");
+			tmp.push_back(p);
+			k = 0;
+		}
+		else
+			p.values[k++] = atoi(&c);
+	}
+	tmp.push_back(p);
+	tetravex.set_pieces(tmp);
+	return i;
+}
+
 Tetravex to_tetravex(std::fstream &infile)
 {
 	if (!infile)
@@ -151,6 +176,7 @@ Tetravex to_tetravex(std::fstream &infile)
 	}
 
 	// Check size of the tetravex (2x2 to 6x6)
+	std::cout << count_line << std::endl;
 	if (sqrt(count_line) != 2 && sqrt(count_line) != 3 && sqrt(count_line) != 4 && sqrt(count_line) != 5 && sqrt(count_line) != 6)
 	{
 		throw std::invalid_argument("Wrong size in the input file.\n");

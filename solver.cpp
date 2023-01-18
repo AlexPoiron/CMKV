@@ -57,10 +57,7 @@ void swap_pieces(std::vector<Piece> *pieces, int piece1, int piece2)
 void Solver::solve(Tetravex &game)
 {
     std::vector<Piece> pieces = game.get_pieces();
-    if (pieces.empty())
-    {
-        std::cout << "The pieces vector is empty" << std::endl;
-    }
+
     int width = game.get_width();
     int height = game.get_height();
 
@@ -95,6 +92,7 @@ void Solver::solve(Tetravex &game)
             game.set_pieces(pieces);
             current_score = new_score;
         }
+
         printf("Score : %d, Temperature : %.6f\n", current_score, temperature);
 
         pieces = game.get_pieces();
