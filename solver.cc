@@ -150,7 +150,7 @@ void Solver::solve(Tetravex &game)
     float temperature = temperature_max;
     int iterations = 0;
 
-    while (current_score != max_score)
+    while (current_score != max_score && iterations < 100000000)
     {
         int piece1 = 0;
         int piece2 = 0;
@@ -184,7 +184,6 @@ void Solver::solve(Tetravex &game)
         if (temperature > temperature_min)
         {
             temperature = temperature_max / (1 + lambda * iterations);
-            //temperature *= lambda;
         }
 
         iterations++;
