@@ -12,7 +12,7 @@ int main(int argc, char **argv)
         throw std::invalid_argument("Your command line has to be : command line ./a.out in.txt out.txt\n");
     }
 
-    // Hyperparameter for our solver
+    // Hyperparameters for our solver
     float TEMP_MIN = 0.8;
     float TEMP_MAX = 10.0;
     float LAMBDA = 0.0001;

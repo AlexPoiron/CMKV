@@ -5,7 +5,7 @@
  * 
  * @param temperature_min Hyperparameter for the minimal temperature
  * @param temperature_max Hyperparameter for the maximal temperature
- * @param lambda Hyperparameter that is set around 1 (0.999...)
+ * @param lambda Hyperparameter that is set around 0 (0.0001)
  * 
  * @return Initialize a Solver object 
 */
@@ -150,7 +150,9 @@ void Solver::solve(Tetravex &game)
     float temperature = temperature_max;
     int iterations = 0;
 
-    while (current_score != max_score && iterations < 100000000)
+    //We set here a maximal value of itertions to avoid an infinity loop.
+    int MAX_ITERATIONS = 100000000;
+    while (current_score != max_score && iterations < MAX_ITERATIONS)
     {
         int piece1 = 0;
         int piece2 = 0;

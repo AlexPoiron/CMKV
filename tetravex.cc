@@ -174,7 +174,7 @@ Tetravex to_tetravex(std::fstream &infile, bool &fixed)
 			const char c = line[i];
 			if ('0' > c || c > '9')
 			{
-				throw std::invalid_argument("Input file with wrong format, numeric check failed\n.");
+				throw std::invalid_argument("Input file with wrong format, numeric check failed.\n");
 			}
 
 			int value = c - '0';
@@ -193,7 +193,7 @@ Tetravex to_tetravex(std::fstream &infile, bool &fixed)
 		}
 		else
 		{
-			throw std::invalid_argument("Input file with wrong format\n");
+			throw std::invalid_argument("Input file with wrong format on the lines.\n");
 		}
 		// Add the piece in our vector
 		pieces.push_back(new_piece);
@@ -203,7 +203,7 @@ Tetravex to_tetravex(std::fstream &infile, bool &fixed)
 	// Check size of the tetravex (2x2 to 6x6)
 	if (sqrt(count_line) != 2 && sqrt(count_line) != 3 && sqrt(count_line) != 4 && sqrt(count_line) != 5 && sqrt(count_line) != 6)
 	{
-		throw std::invalid_argument("Wrong size in the input file.\n");
+		throw std::invalid_argument("Wrong size of grid in the input file.\n");
 	}
 
 	// Creation of the tetravex object
