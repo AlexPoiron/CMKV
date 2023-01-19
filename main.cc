@@ -14,8 +14,8 @@ int main(int argc, char **argv)
 
     // Hyperparameter for our solver
     float TEMP_MIN = 0.8;
-    float TEMP_MAX = 15.0;
-    float LAMBDA = 0.9999;
+    float TEMP_MAX = 30.0;
+    float LAMBDA = 0.001;
 
     // Create a Solver object 
     Solver solver(TEMP_MIN, TEMP_MAX, LAMBDA);
